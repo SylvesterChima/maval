@@ -1,0 +1,111 @@
+﻿@model Marval.Models.EmployeeModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="py-4">
+    <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+        <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+            <li class="breadcrumb-item">
+                <a href="/">
+                    <span class="fa fa-user"></span>
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Employee details</li>
+        </ol>
+    </nav>
+    <div class="d-flex justify-content-between">
+        <div class="mb-3 mb-lg-0">
+            <h1 class="h4">Employee Details</h1>
+            <p class="mb-0"></p>
+        </div>
+        <div>
+            <a href="#" class="btn" data-bs-toggle="modal" data-bs-target="#modal-form-delete">
+                <span class="fa fa-trash-can"></span> Delete
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="card border-0 shadow mb-4">
+    <div class="card-body">
+        @Html.Raw(ViewBag.Msg)
+
+        <div class="card p-3 p-lg-4">
+            <div class="text-center text-md-center mb-4 mt-md-0">
+                <h1 class="mb-0 h4">Employee Details </h1>
+            </div>
+            <form action="/Employees/Details" class="mt-4" method="post">
+                <div class="form-group mb-4">
+                    <label for="firstname">First Name</label>
+                    <div class="input-group">
+                        <input type="hidden" name="Identity" id="identity" value="@Model.Identity">
+                        <input type="text" name="FirstName" class="form-control" placeholder="first name" id="firstname" value="@Model.FirstName" required>
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="surname">SurName</label>
+                    <div class="input-group">
+                        <input type="text" name="Surname" class="form-control" placeholder="surname" id="lastname" value="@Model.Surname" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm">
+                        <label for="age" class="form-label">Age</label>
+                        <input type="number" class="form-control" id="age" name="Age" placeholder="age" value="@Model.Age" required>
+                    </div>
+                    <div class="col-sm">
+                        <label class="my-1 me-2" for="sex">Sex</label>
+                        <select class="form-select mb-3" id="sex" name="Sex" required>
+                            <option value="@Model.Sex" selected>@Model.Sex</option>
+                            @if(Model.Sex.ToLower() == "f"){
+                                <option value="M">M</option>
+                            }
+                            else{
+                                <option value="F">F</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="mobile" class="form-label">Mobile</label>
+                    <input type="text" name="Mobile" class="form-control" placeholder="mobile" id="mobile" value="@Model.Mobile" required>
+                </div>
+                <div class="mb-3">
+                    <label for="active" class="form-label">Is Active</label>
+                    <input type="checkbox" name="Active" id="active" value="true" checked="@Model.Active">
+                </div>
+
+                <div >
+                    <a href="/employees" class="btn btn-outline-dark">Back</a>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modals -->
+<div class="modal fade" id="modal-form-delete" tabindex="-1" role="dialog" aria-labelledby="modal-form-delete" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Record</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this record?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">No</button>
+            <a href="/employees/delete/@Model.Identity" class="btn btn-danger">Yes Continue</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+

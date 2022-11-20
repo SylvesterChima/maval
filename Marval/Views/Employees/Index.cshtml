@@ -1,0 +1,155 @@
+﻿@model IEnumerable<Marval.Models.EmployeeModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="py-4">
+    <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+        <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+            <li class="breadcrumb-item">
+                <a href="/">
+                    <span class="fa fa-home"></span>
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Employees</li>
+        </ol>
+    </nav>
+    <div class="d-flex justify-content-between">
+        <div class="mb-3 mb-lg-0">
+            <h1 class="h4">Employees</h1>
+            <p class="mb-0"></p>
+        </div>
+        <div>
+            <a href="#" class="btn align-items-center" data-bs-toggle="modal" data-bs-target="#modal-form-add">
+                <span class="fa fa-plus"></span> Add New Employee
+            </a>
+            <a href="#" class="btn align-items-center" id="uploadCSVButton">
+                <span class="fa fa-upload"> </span> Upload CSV
+            </a>
+        </div>
+    </div>
+</div>
+
+@*hidden form*@
+<form id="csvForm" action="Employees/UploadCSV" method="post" enctype="multipart/form-data" style="display: none;">
+    <input type="file" id="hidenFile" accept=".csv" name="file">
+</form>
+
+<div class="card border-0 shadow mb-4">
+    <div class="card-body">
+        @Html.Raw(ViewBag.Msg)
+
+        <div class="table-responsive">
+            <table class="table mtable table-centered table-nowrap mb-0 rounded">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="border-0 rounded-start">Idenity</th>
+                        <th class="border-0">Name</th>
+                        <th class="border-0">Age</th>
+                        <th class="border-0">Sex</th>
+                        <th class="border-0">Mobile</th>
+                        <th class="border-0">Active</th>
+                        <th class="border-0 rounded-end"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><a href="/employees/details/@item.Identity" class="text-primary fw-bold">@item.Identity</a> </td>
+                            <td>@item.Surname @item.FirstName</td>
+                            <td>@item.Age</td>
+                            <td>@item.Sex</td>
+                            <td>@item.Mobile</td>
+                            <td>@item.Active</td>
+                            <td>
+                                <a href="/employees/details/@item.Identity" class="btn btn-primary btn-sm float-end"> Details</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modals -->
+<div class="modal fade" id="modal-form-add" tabindex="-1" role="dialog" aria-labelledby="modal-form-add" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <div class="card p-3 p-lg-4">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center text-md-center mb-4 mt-md-0">
+                        <h1 class="mb-0 h4">Add New Employee </h1>
+                    </div>
+                    <form action="/Employees/AddEmployee" class="mt-4" method="post">
+                        <!-- Form -->
+                        <div class="form-group mb-4">
+                            <label for="firstname">First Name</label>
+                            <div class="input-group">
+                                <input type="text" name="FirstName" class="form-control" placeholder="first name" id="firstname" autofocus required>
+                            </div>
+                        </div>
+                        <div class="form-group mb-4">
+                            <label for="surname">SurName</label>
+                            <div class="input-group">
+                                <input type="text" name="Surname" class="form-control" placeholder="surname" id="lastname" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" name="Age" placeholder="age" required>
+                            </div>
+                            <div class="col-sm">
+                                <label class="my-1 me-2" for="sex">Sex</label> 
+                                <select class="form-select mb-3" id="sex" name="Sex" required>
+                                    <option value="" selected>..select..</option>
+                                    <option value="M">M</option>
+                                    <option value="F">F</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label">Mobile</label>
+                            <input type="text" name="Mobile" class="form-control" placeholder="mobile" id="mobile" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="active" class="form-label">Is Active</label>
+                            <input type="checkbox" name="Active" id="active" value="true">
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                        <!-- End of Form -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script>
+        const upload = () => {
+            document.getElementById("csvForm").submit();
+        };
+
+        const hidenFile = document.getElementById('hidenFile');
+        const uploadCSVButton = document.getElementById('uploadCSVButton');
+        const onSelectFile = () => upload();
+        hidenFile.addEventListener('change', onSelectFile, false);
+
+        uploadCSVButton.addEventListener('click', function () {
+            hidenFile.click();
+        });
+
+    </script>
+}
+
+
